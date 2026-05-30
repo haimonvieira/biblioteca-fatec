@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Carteira Digital FATEC Registro</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef3f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .carteira {
+            width: 360px;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+            overflow: hidden;
+        }
+
+        .topo {
+            background: #003f7d;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .topo h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .topo p {
+            margin: 6px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .conteudo {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .foto {
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #003f7d;
+            margin-bottom: 12px;
+        }
+
+        .nome {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0;
+            color: #222;
+        }
+
+        .info {
+            margin: 6px 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .qr {
+            width: 220px;
+            height: 220px;
+            margin: 20px auto 12px;
+            display: block;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #d8f5df;
+            color: #087a28;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .codigo {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #777;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="carteira">
+        <div class="topo">
+            <h1>Carteira Digital</h1>
+            <p>FATEC Registro</p>
+        </div>
+
+        <div class="conteudo">
+            <img class="foto" src="<%= aluno.foto_url || '/img/avatar.png' %>" alt="Foto do aluno">
+
+            <div class="nome"><%= aluno.nome %></div>
+
+            <p class="info">RA: <%= aluno.ra %></p>
+            <p class="info">Curso: <%= aluno.curso || 'Não informado' %></p>
+
+            <img class="qr" src="<%= qrCodeBase64 %>" alt="QR Code da carteira digital">
+
+            <span class="status"><%= aluno.status %></span>
+
+            <div class="codigo">
+                Código: <%= aluno.codigo_carteira %>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
