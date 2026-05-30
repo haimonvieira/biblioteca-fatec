@@ -1,7 +1,7 @@
 <%- include('../partials/head', { title, active }) %>
-<div class="panel">
+<div class="panel reserva-confirmada-page">
     <div class="card">
-        <div class="inline-row" style="align-items:center; justify-content:space-between; width:100%;">
+        <div class="inline-row page-section-header" style="align-items:center; justify-content:space-between; width:100%;">
             <div>
                 <h2>Reserva Confirmada</h2>
                 <p class="small-text">Sua reserva foi registrada com sucesso.</p>
@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="grid-2">
+    <div class="grid-2 confirmation-grid">
         <div class="card">
             <h3>Livro reservado</h3>
             <p class="book-title" style="margin-bottom: 4px;"><%= reserva.livro.titulo %></p>

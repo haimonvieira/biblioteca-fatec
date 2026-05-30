@@ -1,6 +1,6 @@
 <%- include('../partials/head', { title, active }) %>
-<div class="panel">
-    <div class="panel-grid">
+<div class="panel biblioteca-page">
+    <div class="panel-grid biblioteca-hero">
         <section class="card user-card">
             <div class="user-card-header">
                 <div>
@@ -24,7 +24,7 @@
                     <strong><%= usuarioAtual.ultimoAcesso %></strong>
                 </div>
             </div>
-            <div class="action-buttons">
+            <div class="action-buttons biblioteca-actions">
                 <a href="/app/reservas/<%= usuarioAtual.id %>" class="primary-button">Minhas reservas</a>
                 <a href="/app/emprestimos/<%= usuarioAtual.id %>" class="secondary-button">Meus empréstimos</a>
             </div>
@@ -50,7 +50,7 @@
     </div>
 </div>
 
-<div class="cards-grid">
+<div class="cards-grid biblioteca-grid">
     <% if (livros && livros.length) { %>
         <% livros.forEach(livro => { %>
             <div class="card book-card">

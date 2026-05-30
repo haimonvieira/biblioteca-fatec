@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const db = require('./config/database');
+const Aluno = require('./models/Aluno');
 require('dotenv').config();
 
 const app = express();
@@ -16,30 +18,95 @@ app.use(express.urlencoded({ extended: true }));
 // Arquivos públicos, se quiser usar imagens/css depois
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Simula uma sessão de usuário sem login para o painel do aluno
-app.use((req, res, next) => {
-    res.locals.usuarioAtual = {
+function formatDateTime(value) {
+    if (!value) {
+        return 'Sem registro';
+    }
+
+    return new Date(value).toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function normalizeNameForImage(nome) {
+    return String(nome || 'aluno')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .split(/\s+/)[0]
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]/g, '') || 'aluno';
+}
+
+function resolveAlunoFotoUrl(aluno) {
+    const fotoUrl = aluno?.foto_url || '';
+    if (fotoUrl.startsWith('/img/') || fotoUrl.startsWith('http://') || fotoUrl.startsWith('https://')) {
+        return fotoUrl;
+    }
+
+    const imageName = normalizeNameForImage(aluno?.nome);
+    const extensions = ['jpeg', 'jpg', 'png'];
+    const matchedExtension = extensions.find((extension) => {
+        return fs.existsSync(path.join(__dirname, 'public', 'img', `${imageName}.${extension}`));
+    });
+
+    return `/img/${imageName}.${matchedExtension || 'jpeg'}`;
+}
+
+function buildFallbackUsuarioAtual() {
+    return {
         id: 1,
-        nome: 'Haimon Santos',
-        ra: '2023001',
-        curso: 'Análise e Desenvolvimento de Sistemas',
-        periodo: '5º Semestre',
+        nome: 'Haimon',
+        ra: '123456',
+        curso: 'DSM',
+        periodo: '',
         status: 'Ativo',
-        ultimoAcesso: new Date(Date.now() - 25 * 60000).toLocaleString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        }),
+        foto_url: '/img/haimon.jpeg',
+        ultimoAcesso: 'Sem registro',
         dispositivo: 'Totem NFC Biblioteca',
         leitor: 'Leitor RFID #04',
         local: 'Biblioteca Central',
-        sessao: 'Simulada para demonstração do aluno'
+        sessao: 'Aluno padrão'
     };
+}
+
+function mapAlunoToUsuarioAtual(aluno) {
+    return {
+        id: aluno.id,
+        nome: aluno.nome,
+        ra: aluno.ra,
+        email: aluno.email,
+        curso: aluno.curso || 'Não informado',
+        periodo: '',
+        status: aluno.status || aluno.situacao_matricula || 'Não informado',
+        foto_url: resolveAlunoFotoUrl(aluno),
+        codigo_rfid_nfc: aluno.codigo_rfid_nfc,
+        codigo_carteira: aluno.codigo_carteira,
+        carteira_ativa: aluno.carteira_ativa,
+        ultimoAcesso: formatDateTime(aluno.ultimo_acesso),
+        dispositivo: 'Totem NFC Biblioteca',
+        leitor: 'Leitor RFID #04',
+        local: 'Biblioteca Central',
+        sessao: 'Aluno carregado da tabela alunos'
+    };
+}
+
+// Sessão simples para demonstração: o aluno logado é sempre o primeiro cadastro.
+app.use(async (req, res, next) => {
+    try {
+        const aluno = await Aluno.buscarPorId(1);
+        res.locals.usuarioAtual = aluno ? mapAlunoToUsuarioAtual(aluno) : buildFallbackUsuarioAtual();
+    } catch (error) {
+        console.error('Erro ao carregar aluno logado:', error.message);
+        res.locals.usuarioAtual = buildFallbackUsuarioAtual();
+    }
+
     next();
 });
-
 app.get('/', (req, res) => {
     res.redirect('/app/biblioteca');
 });
@@ -116,3 +183,4 @@ if (require.main === module) {
 }
 
 module.exports = app;
+

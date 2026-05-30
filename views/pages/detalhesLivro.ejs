@@ -1,7 +1,7 @@
 <%- include('../partials/head', { title, active }) %>
-<div class="panel">
+<div class="panel detalhes-page">
     <div class="card">
-        <div class="inline-row" style="align-items:center; justify-content:space-between; gap:16px;">
+        <div class="inline-row details-header" style="align-items:center; justify-content:space-between; gap:16px;">
             <div>
                 <h2><%= livro.titulo %></h2>
                 <p class="book-author"><%= livro.autor || 'Autor não informado' %></p>
@@ -11,9 +11,9 @@
     </div>
 </div>
 
-<div class="panel grid-2">
-    <div class="card">
-        <img src="<%= livro.capa_url || 'https://via.placeholder.com/320x460?text=Capa+sem+imagem' %>" alt="Capa do livro <%= livro.titulo %>" style="width:100%; border-radius:1rem; max-height:420px; object-fit:cover;">
+<div class="panel grid-2 details-grid">
+    <div class="card details-cover-card">
+        <img class="details-cover" src="<%= livro.capa_url || 'https://via.placeholder.com/320x460?text=Capa+sem+imagem' %>" alt="Capa do livro <%= livro.titulo %>" style="width:100%; border-radius:1rem; max-height:420px; object-fit:cover;">
         <div style="margin-top:1rem;">
             <p class="small-text">Editora: <strong><%= livro.editora || 'Não informada' %></strong></p>
             <p class="small-text">Ano: <strong><%= livro.ano_publicacao || '—' %></strong></p>
@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<div class="card table-card">
+<div class="card table-card details-table-card">
     <h3>Exemplares</h3>
     <table class="table">
         <thead>

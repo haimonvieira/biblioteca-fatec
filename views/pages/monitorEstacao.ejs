@@ -1,6 +1,6 @@
 <%- include('../partials/head', { title, active }) %>
-<div class="panel">
-    <div class="grid-2">
+<div class="panel monitor-page">
+    <div class="grid-2 monitor-grid">
         <div class="card">
             <h3>Monitor da estação RFID/NFC</h3>
             <p class="help-text">Use esta página para simular as leituras e visualizar o status da estação técnica.</p>
@@ -23,8 +23,8 @@
         </div>
         <div class="card">
             <h3>Simulações</h3>
-            <div class="form-grid">
-                <form id="formValidarAluno" class="card" style="padding:18px;">
+            <div class="form-grid monitor-forms">
+                <form id="formValidarAluno" class="card monitor-form-card" style="padding:18px;">
                     <h4>Validar aluno</h4>
                     <label>
                         Código NFC/RFID
@@ -32,7 +32,7 @@
                     </label>
                     <button type="submit" class="button">Validar aluno</button>
                 </form>
-                <form id="formValidarExemplar" class="card" style="padding:18px;">
+                <form id="formValidarExemplar" class="card monitor-form-card" style="padding:18px;">
                     <h4>Validar exemplar</h4>
                     <label>
                         Código RFID
@@ -40,7 +40,7 @@
                     </label>
                     <button type="submit" class="button">Validar exemplar</button>
                 </form>
-                <form id="formRegistrarEmprestimo" class="card" style="padding:18px;">
+                <form id="formRegistrarEmprestimo" class="card monitor-form-card" style="padding:18px;">
                     <h4>Registrar empréstimo</h4>
                     <label>
                         NFC do aluno
@@ -52,7 +52,7 @@
                     </label>
                     <button type="submit" class="button">Registrar empréstimo</button>
                 </form>
-                <form id="formRegistrarDevolucao" class="card" style="padding:18px;">
+                <form id="formRegistrarDevolucao" class="card monitor-form-card" style="padding:18px;">
                     <h4>Registrar devolução</h4>
                     <label>
                         RFID do exemplar

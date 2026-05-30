@@ -1,6 +1,6 @@
 <%- include('../partials/head', { title, active }) %>
-<div class="panel">
-    <div class="grid-3">
+<div class="panel vigilante-page">
+    <div class="grid-3 vigilante-metrics">
         <div class="metric-card">
             <h3>Ocorrências</h3>
             <p><%= ocorrencias.length %></p>
@@ -25,10 +25,10 @@
         </form>
     </div>
 
-    <div class="grid-2">
-        <div class="card">
+    <div class="grid-2 vigilante-grid">
+        <div class="card table-card">
             <h3>Ocorrências recentes</h3>
-            <table>
+            <table class="table responsive-table">
                 <thead>
                     <tr>
                         <th>Tipo</th>
@@ -54,9 +54,9 @@
             </table>
         </div>
 
-        <div class="card">
+        <div class="card table-card">
             <h3>Empréstimos ativos</h3>
-            <table>
+            <table class="table responsive-table">
                 <thead>
                     <tr>
                         <th>Livro</th>
@@ -84,9 +84,9 @@
     </div>
 
     <% if (acessosAluno) { %>
-        <div class="card">
+        <div class="card table-card">
             <h3>Histórico de acessos do aluno <%= alunoBusca %></h3>
-            <table>
+            <table class="table responsive-table">
                 <thead>
                     <tr>
                         <th>Evento</th>
