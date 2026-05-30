@@ -1,0 +1,150 @@
+<%- include('../partials/head', { title, active }) %>
+<div class="panel">
+    <div class="grid-2">
+        <div class="card">
+            <h3>Monitor da estação RFID/NFC</h3>
+            <p class="help-text">Use esta página para simular as leituras e visualizar o status da estação técnica.</p>
+            <div class="card shadow-panel">
+                <p><strong>Último aluno identificado:</strong> <span id="ultimoAluno">Nenhum</span></p>
+                <p><strong>Último exemplar lido:</strong> <span id="ultimoExemplar">Nenhum</span></p>
+                <p><strong>Último empréstimo registrado:</strong> <span id="ultimoEmprestimo">Nenhum</span></p>
+                <p><strong>Última devolução registrada:</strong> <span id="ultimaDevolucao">Nenhum</span></p>
+                <div style="margin-top:18px;">
+                    <strong>Status atual da estação:</strong>
+                    <ul style="margin:8px 0 0 16px; color:#475569; line-height:1.8;">
+                        <li id="statusAguardandoAluno">Aguardando aluno</li>
+                        <li id="statusAguardandoLivro">Aguardando livro</li>
+                        <li id="statusEmprestimoAprovado">Empréstimo aprovado</li>
+                        <li id="statusDevolucaoRegistrada">Devolução registrada</li>
+                        <li id="statusOperacaoNegada">Operação negada</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Simulações</h3>
+            <div class="form-grid">
+                <form id="formValidarAluno" class="card" style="padding:18px;">
+                    <h4>Validar aluno</h4>
+                    <label>
+                        Código NFC/RFID
+                        <input type="text" id="codigoAluno" placeholder="FATEC-ALUNO-123456" required>
+                    </label>
+                    <button type="submit" class="button">Validar aluno</button>
+                </form>
+                <form id="formValidarExemplar" class="card" style="padding:18px;">
+                    <h4>Validar exemplar</h4>
+                    <label>
+                        Código RFID
+                        <input type="text" id="codigoExemplar" placeholder="FATEC-BIB-EX-001" required>
+                    </label>
+                    <button type="submit" class="button">Validar exemplar</button>
+                </form>
+                <form id="formRegistrarEmprestimo" class="card" style="padding:18px;">
+                    <h4>Registrar empréstimo</h4>
+                    <label>
+                        NFC do aluno
+                        <input type="text" id="codigoAlunoEmprestimo" placeholder="FATEC-ALUNO-123456" required>
+                    </label>
+                    <label>
+                        RFID do exemplar
+                        <input type="text" id="codigoExemplarEmprestimo" placeholder="FATEC-BIB-EX-002" required>
+                    </label>
+                    <button type="submit" class="button">Registrar empréstimo</button>
+                </form>
+                <form id="formRegistrarDevolucao" class="card" style="padding:18px;">
+                    <h4>Registrar devolução</h4>
+                    <label>
+                        RFID do exemplar
+                        <input type="text" id="codigoExemplarDevolucao" placeholder="FATEC-BIB-EX-001" required>
+                    </label>
+                    <button type="submit" class="button">Registrar devolução</button>
+                </form>
+            </div>
+            <div id="monitorMensagem" class="alert" style="display:none; margin-top: 18px;"></div>
+        </div>
+    </div>
+</div>
+<script>
+    const state = {
+        ultimoAluno: null,
+        ultimoExemplar: null,
+        ultimoEmprestimo: null,
+        ultimaDevolucao: null,
+        currentStatus: 'aguardando aluno'
+    };
+
+    function setStatus(statusKey) {
+        const keys = ['statusAguardandoAluno', 'statusAguardandoLivro', 'statusEmprestimoAprovado', 'statusDevolucaoRegistrada', 'statusOperacaoNegada'];
+        keys.forEach(id => document.getElementById(id).style.fontWeight = '400');
+        document.getElementById(statusKey).style.fontWeight = '700';
+    }
+
+    function updateUI(message) {
+        document.getElementById('ultimoAluno').textContent = state.ultimoAluno || 'Nenhum';
+        document.getElementById('ultimoExemplar').textContent = state.ultimoExemplar || 'Nenhum';
+        document.getElementById('ultimoEmprestimo').textContent = state.ultimoEmprestimo || 'Nenhum';
+        document.getElementById('ultimaDevolucao').textContent = state.ultimaDevolucao || 'Nenhum';
+        document.getElementById('monitorMensagem').style.display = message ? 'block' : 'none';
+        document.getElementById('monitorMensagem').textContent = message || '';
+    }
+
+    async function handleApi(path, payload) {
+        const response = await fetch(path, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        return response.json();
+    }
+
+    document.getElementById('formValidarAluno').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const codigo = document.getElementById('codigoAluno').value.trim();
+        if (!codigo) return;
+        const result = await handleApi('/nfc/aluno/validar', { codigo_nfc: codigo });
+        state.ultimoAluno = codigo;
+        state.currentStatus = result.sucesso ? 'aguardando livro' : 'operacao negada';
+        setStatus(result.sucesso ? 'statusAguardandoLivro' : 'statusOperacaoNegada');
+        updateUI(result.sucesso ? `Aluno validado: ${result.aluno?.nome || 'sem nome'}` : result.mensagem || 'Falha na validação');
+    });
+
+    document.getElementById('formValidarExemplar').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const codigo = document.getElementById('codigoExemplar').value.trim();
+        if (!codigo) return;
+        const result = await handleApi('/livros/validar-rfid', { codigo_rfid: codigo });
+        state.ultimoExemplar = codigo;
+        state.currentStatus = result.sucesso ? 'aguardando aluno' : 'operacao negada';
+        setStatus(result.sucesso ? 'statusAguardandoAluno' : 'statusOperacaoNegada');
+        updateUI(result.sucesso ? `Exemplar validado: ${result.livro?.titulo || 'sem título'}` : result.mensagem || 'Falha na validação');
+    });
+
+    document.getElementById('formRegistrarEmprestimo').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const aluno = document.getElementById('codigoAlunoEmprestimo').value.trim();
+        const exemplar = document.getElementById('codigoExemplarEmprestimo').value.trim();
+        if (!aluno || !exemplar) return;
+        const result = await handleApi('/emprestimos/registrar', { codigo_nfc_aluno: aluno, codigo_rfid_exemplar: exemplar });
+        state.ultimoAluno = aluno;
+        state.ultimoExemplar = exemplar;
+        state.ultimoEmprestimo = result.mensagem || 'Registrado';
+        setStatus(result.sucesso ? 'statusEmprestimoAprovado' : 'statusOperacaoNegada');
+        updateUI(result.sucesso ? `Empréstimo aprovado: ${result.emprestimo?.livro?.titulo || ''}` : result.mensagem || 'Falha no registro');
+    });
+
+    document.getElementById('formRegistrarDevolucao').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const exemplar = document.getElementById('codigoExemplarDevolucao').value.trim();
+        if (!exemplar) return;
+        const result = await handleApi('/devolucoes/registrar', { codigo_rfid_exemplar: exemplar });
+        state.ultimoExemplar = exemplar;
+        state.ultimaDevolucao = result.sucesso ? `Devolução registrada` : 'Falha na devolução';
+        setStatus(result.sucesso ? 'statusDevolucaoRegistrada' : 'statusOperacaoNegada');
+        updateUI(result.mensagem || 'Devolução processada');
+    });
+
+    setStatus('statusAguardandoAluno');
+    updateUI('Use os formulários ao lado para monitorar as operações.');
+</script>
+<%- include('../partials/footer') %>

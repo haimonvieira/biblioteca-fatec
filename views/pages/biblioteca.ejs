@@ -1,0 +1,43 @@
+<%- include('../partials/head', { title, active }) %>
+<div class="panel">
+    <div class="grid-3">
+        <div class="metric-card">
+            <h3>Visão geral do acervo</h3>
+            <p><%= livros.length %> títulos</p>
+        </div>
+        <div class="metric-card">
+            <h3>Busca e filtro</h3>
+            <p>Use os detalhes do livro para criar reservas.</p>
+        </div>
+        <div class="metric-card">
+            <h3>Experiência</h3>
+            <p>Sem totem de tela: as ações de reserva e consulta podem ser feitas em dispositivos conectados ao back-end.</p>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        <% if (livros && livros.length) { %>
+            <% livros.forEach(livro => { %>
+                <div class="card book-card">
+                    <div class="book-info">
+                        <img src="<%= livro.capa_url || 'https://via.placeholder.com/320x400?text=Capa+sem+imagem' %>" alt="Capa do livro">
+                        <h2 class="book-title"><%= livro.titulo %></h2>
+                        <p class="book-author"><%= livro.autor || 'Autor não informado' %></p>
+                        <div class="stats-row">
+                            <div class="stat-pill"><strong>Total</strong><%= livro.total_exemplares || 0 %></div>
+                            <div class="stat-pill"><strong>Disponíveis</strong><%= livro.disponiveis || 0 %></div>
+                            <div class="stat-pill"><strong>Emprestados</strong><%= livro.emprestados || 0 %></div>
+                            <div class="stat-pill"><strong>Reservados</strong><%= livro.reservados || 0 %></div>
+                        </div>
+                    </div>
+                    <a href="/app/livro/<%= livro.id %>" class="button">Ver detalhes</a>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="card">
+                <p>Nenhum livro encontrado no acervo.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
+<%- include('../partials/footer') %>

@@ -50,6 +50,9 @@ app.use('/reservas', reservaRoutes);
 const ocorrenciaRoutes = require('./routes/ocorrenciaRoutes.js');
 app.use('/ocorrencias', ocorrenciaRoutes);
 
+const pageRoutes = require('./routes/pageRoutes.js');
+app.use('/app', pageRoutes);
+
 // Teste do RFID do livro
 app.get('/rfid/check/:codigo', async (req, res) => {
     try {

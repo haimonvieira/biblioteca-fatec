@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: Inter, Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #eef2f7 0%, #f8fbff 100%);
+        }
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #002f66;
+            color: #ffffff;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            margin-bottom: 12px;
+        }
+
+        .sidebar p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .nav-item {
+            display: block;
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: #dbeafe;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255,255,255,0.12);
+            color: #ffffff;
+        }
+
+        .nav-item span {
+            display: block;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .main-content {
+            padding: 28px 32px;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .subtitle {
+            margin: 8px 0 0;
+            color: #475569;
+            font-size: 15px;
+            max-width: 640px;
+        }
+
+        .panel {
+            display: grid;
+            gap: 22px;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .book-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 18px;
+            min-height: 320px;
+        }
+
+        .book-card img {
+            width: 100%;
+            border-radius: 18px;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            background: #e2e8f0;
+        }
+
+        .book-info {
+            flex: 1;
+        }
+
+        .book-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .book-author {
+            margin: 6px 0 0;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .stat-pill {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 12px;
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .stat-pill strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #0f172a;
+            font-size: 15px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 14px;
+            background: #2563eb;
+            color: #ffffff;
+            padding: 12px 18px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            transform: translateY(-1px);
+            background: #1d4ed8;
+        }
+
+        .button-secondary {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .button-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            color: #334155;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        td {
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .status-success {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #a16207;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status-default {
+            background: #f8fafc;
+            color: #334155;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        label {
+            display: grid;
+            gap: 8px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            padding: 14px 16px;
+            background: #ffffff;
+            color: #0f172a;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .alert {
+            border-radius: 18px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        .grid-2 {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: minmax(0, 1fr) 320px;
+        }
+
+        .grid-3 {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .metric-card {
+            border-radius: 20px;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.05);
+        }
+
+        .metric-card h3 {
+            margin: 0 0 12px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .metric-card p {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .small-text {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .help-text {
+            margin-top: 14px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .shadow-panel {
+            box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+        }
+
+        .inline-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 88px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .badge.green { background: #daf5e0; color:#166534; }
+        .badge.blue { background: #dbeafe; color:#1d4ed8; }
+        .badge.red { background: #fee2e2; color:#b91c1c; }
+        .badge.gray { background: #e2e8f0; color:#475569; }
+
+        .footer-note {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .grid-2-left {
+            display: grid;
+            gap: 16px;
+        }
+
+        @media(max-width: 1024px) {
+            .app-shell { grid-template-columns: 1fr; }
+            .sidebar { flex-direction: row; overflow-x: auto; min-height: auto; padding: 20px; }
+            .nav-list { display: flex; gap: 10px; }
+            .main-content { padding: 20px; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">Conecta Biblioteca</div>
+        <p>Interface de demonstração para o sistema de biblioteca autônoma com RFID/NFC.</p>
+        <ul class="nav-list">
+            <li><a href="/app/biblioteca" class="nav-item <%= active === 'biblioteca' ? 'active' : '' %>">Biblioteca</a></li>
+            <li><a href="/app/reservas/1" class="nav-item <%= active === 'reservas' ? 'active' : '' %>"><span>Minhas Reservas</span></a></li>
+            <li><a href="/app/emprestimos/1" class="nav-item <%= active === 'emprestimos' ? 'active' : '' %>"><span>Empréstimos do Aluno</span></a></li>
+            <li><a href="/app/vigilante" class="nav-item <%= active === 'vigilante' ? 'active' : '' %>"><span>Painel do Vigilante</span></a></li>
+            <li><a href="/app/monitor" class="nav-item <%= active === 'monitor' ? 'active' : '' %>"><span>Monitor RFID/NFC</span></a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <div class="header-row">
+            <div>
+                <h1 class="page-title"><%= title %></h1>
+                <p class="subtitle">Use essa interface para representar o fluxo de biblioteca autônoma sem totem com tela.</p>
+            </div>
+        </div>

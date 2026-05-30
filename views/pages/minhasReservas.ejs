@@ -1,0 +1,48 @@
+<%- include('../partials/head', { title, active }) %>
+<div class="panel">
+    <div class="card">
+        <p class="small-text">Lista de reservas vinculadas ao aluno com ID <strong><%= aluno_id %></strong>.</p>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Livro</th>
+                    <th>Data da reserva</th>
+                    <th>Validade</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (reservas && reservas.length) { %>
+                    <% reservas.forEach(reserva => { %>
+                        <tr>
+                            <td><strong><%= reserva.titulo %></strong><br><span class="small-text"><%= reserva.autor || 'Autor não informado' %></span></td>
+                            <td><%= formatDateTime(reserva.data_reserva) %></td>
+                            <td><%= formatDateTime(reserva.expira_em) %></td>
+                            <td><span class="tag <%= buildStatusClass(reserva.status) %>"><%= reserva.status %></span></td>
+                            <td>
+                                <% if (reserva.status === 'ativa') { %>
+                                    <form action="/app/reservas/cancelar" method="post" style="margin:0;">
+                                        <input type="hidden" name="reserva_id" value="<%= reserva.id %>">
+                                        <input type="hidden" name="aluno_id" value="<%= aluno_id %>">
+                                        <button class="button button-secondary" type="submit">Cancelar</button>
+                                    </form>
+                                <% } else { %>
+                                    <span class="badge gray">Sem ação</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5">Nenhuma reserva encontrada para este aluno.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<%- include('../partials/footer') %>

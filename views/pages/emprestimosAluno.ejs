@@ -1,0 +1,42 @@
+<%- include('../partials/head', { title, active }) %>
+<div class="panel">
+    <div class="card">
+        <p class="small-text">Histórico de empréstimos para o aluno com ID <strong><%= aluno_id %></strong>.</p>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Livro</th>
+                    <th>Exemplar</th>
+                    <th>RFID</th>
+                    <th>Retirada</th>
+                    <th>Prevista</th>
+                    <th>Devolução</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (emprestimos && emprestimos.length) { %>
+                    <% emprestimos.forEach(item => { %>
+                        <tr>
+                            <td><strong><%= item.titulo %></strong><br><span class="small-text"><%= item.autor || 'Autor não informado' %></span></td>
+                            <td><%= item.codigo_interno || '—' %></td>
+                            <td><%= item.codigo_rfid || '—' %></td>
+                            <td><%= formatDateTime(item.data_retirada) %></td>
+                            <td><%= formatDateTime(item.data_prevista_devolucao) %></td>
+                            <td><%= formatDateTime(item.data_devolucao) %></td>
+                            <td><span class="tag <%= buildStatusClass(item.status) %>"><%= item.status %></span></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="7">Nenhum empréstimo encontrado para este aluno.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<%- include('../partials/footer') %>

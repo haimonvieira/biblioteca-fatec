@@ -1,0 +1,80 @@
+<%- include('../partials/head', { title, active }) %>
+<div class="panel grid-2">
+    <div class="card">
+        <div class="grid-2-left">
+            <div>
+                <img src="<%= livro.capa_url || 'https://via.placeholder.com/360x460?text=Capa+sem+imagem' %>" alt="Capa do livro" style="width:100%; border-radius:18px;">
+            </div>
+            <div>
+                <h2 class="book-title"><%= livro.titulo %></h2>
+                <p class="book-author"><%= livro.autor || 'Autor não informado' %></p>
+                <p class="small-text">Editora: <strong><%= livro.editora || 'Não informada' %></strong></p>
+                <p class="small-text">Ano: <strong><%= livro.ano_publicacao || '—' %></strong></p>
+                <p class="small-text">ISBN: <strong><%= livro.isbn || '—' %></strong></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Sobre a obra</h3>
+            <p class="help-text"><%= livro.descricao || 'Nenhuma descrição disponível.' %></p>
+            <div class="grid-3" style="margin-top: 18px;">
+                <div class="metric-card">
+                    <h3>Disponíveis</h3>
+                    <p><%= livro.disponiveis || 0 %></p>
+                </div>
+                <div class="metric-card">
+                    <h3>Emprestados</h3>
+                    <p><%= livro.emprestados || 0 %></p>
+                </div>
+                <div class="metric-card">
+                    <h3>Reservados</h3>
+                    <p><%= livro.reservados || 0 %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Reservar este livro</h3>
+        <div class="alert">
+            Preencha o código NFC/RFID do aluno para criar uma reserva válida por 2 horas.
+        </div>
+        <form action="/app/reserva/criar" method="post" class="form-grid" style="margin-top: 18px;">
+            <input type="hidden" name="livro_id" value="<%= livro.id %>">
+            <label>
+                Código NFC/RFID do aluno
+                <input type="text" name="codigo_nfc_aluno" placeholder="FATEC-ALUNO-123456" required>
+            </label>
+            <button type="submit" class="button">Reservar</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Exemplares do livro</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFID do exemplar</th>
+                <th>Localização</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (exemplares && exemplares.length) { %>
+                <% exemplares.forEach(exemplar => { %>
+                    <tr>
+                        <td><%= exemplar.codigo_rfid || exemplar.codigo_interno || '—' %></td>
+                        <td><%= exemplar.localizacao || 'Não informada' %></td>
+                        <td><span class="tag <%= buildStatusClass(exemplar.status) %>"><%= exemplar.status || '—' %></span></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="3">Nenhum exemplar cadastrado para esta obra.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<%- include('../partials/footer') %>

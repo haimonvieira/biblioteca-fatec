@@ -1,0 +1,116 @@
+<%- include('../partials/head', { title, active }) %>
+<div class="panel">
+    <div class="grid-3">
+        <div class="metric-card">
+            <h3>Ocorrências</h3>
+            <p><%= ocorrencias.length %></p>
+        </div>
+        <div class="metric-card">
+            <h3>Empréstimos ativos</h3>
+            <p><%= emprestimosAtivos.length %></p>
+        </div>
+        <div class="metric-card">
+            <h3>Buscar histórico</h3>
+            <p>Informe o ID do aluno para ver acessos recentes.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <form method="get" action="/app/vigilante" class="form-grid">
+            <label>
+                ID do aluno para histórico de acessos
+                <input name="aluno_id" type="text" placeholder="Ex: 1" value="<%= alunoBusca %>">
+            </label>
+            <button class="button" type="submit">Pesquisar</button>
+        </form>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <h3>Ocorrências recentes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Aluno</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (ocorrencias && ocorrencias.length) { %>
+                        <% ocorrencias.slice(0, 6).forEach(item => { %>
+                            <tr>
+                                <td><%= item.tipo %></td>
+                                <td><%= item.aluno_nome || '—' %></td>
+                                <td><span class="tag <%= buildStatusClass(item.status) %>"><%= item.status %></span></td>
+                                <td><%= formatDateTime(item.created_at || item.updated_at || item.data_criacao) %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr><td colspan="4">Nenhuma ocorrência registrada.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>Empréstimos ativos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Livro</th>
+                        <th>Aluno</th>
+                        <th>RFID</th>
+                        <th>Retirada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (emprestimosAtivos && emprestimosAtivos.length) { %>
+                        <% emprestimosAtivos.slice(0, 6).forEach(item => { %>
+                            <tr>
+                                <td><%= item.titulo %></td>
+                                <td><%= item.aluno_nome || '—' %></td>
+                                <td><%= item.codigo_rfid || '—' %></td>
+                                <td><%= formatDateTime(item.data_retirada) %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr><td colspan="4">Nenhum empréstimo ativo.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <% if (acessosAluno) { %>
+        <div class="card">
+            <h3>Histórico de acessos do aluno <%= alunoBusca %></h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Evento</th>
+                        <th>Status</th>
+                        <th>Observação</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (acessosAluno.length) { %>
+                        <% acessosAluno.slice(0, 8).forEach(item => { %>
+                            <tr>
+                                <td><%= item.tipo %></td>
+                                <td><span class="tag <%= buildStatusClass(item.status) %>"><%= item.status %></span></td>
+                                <td><%= item.observacao || '—' %></td>
+                                <td><%= formatDateTime(item.created_at || item.updated_at || item.data_criacao) %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr><td colspan="4">Nenhum acesso encontrado para este aluno.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</div>
+<%- include('../partials/footer') %>
