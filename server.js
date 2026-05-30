@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('Servidor da biblioteca funcionando!');
+    res.redirect('/app/biblioteca');
 });
 
 //Rotas
