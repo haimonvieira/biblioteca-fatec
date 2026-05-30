@@ -43,7 +43,6 @@ Use o pooler IPv4 do Supabase, nao a conexao direta `db.<project>.supabase.co`, 
 
 ```bash
 git clone <url-do-repositorio>
-cd Hackathon
 npm install
 ```
 
@@ -59,16 +58,6 @@ No Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
-```
-
-Preencha o `.env` com os dados do Supabase:
-
-```env
-PORT=3000
-DATABASE_URL=postgresql://postgres.xiuxnmgqxnaamckmhqmd:SUA_SENHA@aws-1-us-west-2.pooler.supabase.com:5432/postgres
-SUPABASE_URL=https://xiuxnmgqxnaamckmhqmd.supabase.co
-SUPABASE_ANON_KEY=sua_anon_key
-SUPABASE_SERVICE_ROLE_KEY=sua_service_role_key
 ```
 
 Notas:
@@ -89,12 +78,6 @@ No Supabase Dashboard:
 O schema cria tabelas, relacionamentos, RLS e dados iniciais de alunos, livros e exemplares.
 
 ### 5. Rodar o Servidor
-
-Para desenvolvimento com reload:
-
-```bash
-npm run dev
-```
 
 Para rodar sem nodemon:
 
@@ -146,21 +129,15 @@ O projeto ja possui:
 Em `Vercel > Project > Settings > Environment Variables`, cadastre:
 
 ```env
-DATABASE_URL=postgresql://postgres.xiuxnmgqxnaamckmhqmd:SUA_SENHA@aws-1-us-west-2.pooler.supabase.com:5432/postgres
-SUPABASE_URL=https://xiuxnmgqxnaamckmhqmd.supabase.co
-SUPABASE_ANON_KEY=sua_anon_key
-SUPABASE_SERVICE_ROLE_KEY=sua_service_role_key
+DATABASE_URL=[SUA_CHAVE]
+SUPABASE_URL=[SUA_CHAVE]
+SUPABASE_ANON_KEY=[SUA_CHAVE]
+SUPABASE_SERVICE_ROLE_KEY=[SUA_CHAVE]
 ```
 
 ### 2. Publicar
 
 Faca o deploy pela integracao GitHub/Vercel ou pela CLI da Vercel.
-
-Depois de publicar, acesse:
-
-```text
-https://biblioteca-fatec.vercel.app/app/biblioteca
-```
 
 ## Endpoints da API
 
