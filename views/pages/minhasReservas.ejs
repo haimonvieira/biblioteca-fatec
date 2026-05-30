@@ -1,11 +1,17 @@
 <%- include('../partials/head', { title, active }) %>
 <div class="panel">
     <div class="card">
-        <p class="small-text">Lista de reservas vinculadas ao aluno com ID <strong><%= aluno_id %></strong>.</p>
+        <div class="inline-row" style="align-items:center; justify-content:space-between; width:100%;">
+            <div>
+                <h2>Minhas Reservas</h2>
+                <p class="small-text">Acompanhe suas reservas ativas, expiradas e canceladas.</p>
+            </div>
+            <span class="badge gray">Aluno ID <%= aluno_id %></span>
+        </div>
     </div>
 
-    <div class="card">
-        <table>
+    <div class="card table-card">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Livro</th>
@@ -28,7 +34,7 @@
                                     <form action="/app/reservas/cancelar" method="post" style="margin:0;">
                                         <input type="hidden" name="reserva_id" value="<%= reserva.id %>">
                                         <input type="hidden" name="aluno_id" value="<%= aluno_id %>">
-                                        <button class="button button-secondary" type="submit">Cancelar</button>
+                                        <button class="secondary-button" type="submit">Cancelar</button>
                                     </form>
                                 <% } else { %>
                                     <span class="badge gray">Sem ação</span>

@@ -1,45 +1,38 @@
 <%- include('../partials/head', { title, active }) %>
+<div class="panel">
+    <div class="card">
+        <div class="inline-row" style="align-items:center; justify-content:space-between; gap:16px;">
+            <div>
+                <h2><%= livro.titulo %></h2>
+                <p class="book-author"><%= livro.autor || 'Autor não informado' %></p>
+            </div>
+            <a href="/app/biblioteca" class="secondary-button">Voltar ao acervo</a>
+        </div>
+    </div>
+</div>
+
 <div class="panel grid-2">
     <div class="card">
-        <div class="grid-2-left">
-            <div>
-                <img src="<%= livro.capa_url || 'https://via.placeholder.com/360x460?text=Capa+sem+imagem' %>" alt="Capa do livro" style="width:100%; border-radius:18px;">
-            </div>
-            <div>
-                <h2 class="book-title"><%= livro.titulo %></h2>
-                <p class="book-author"><%= livro.autor || 'Autor não informado' %></p>
-                <p class="small-text">Editora: <strong><%= livro.editora || 'Não informada' %></strong></p>
-                <p class="small-text">Ano: <strong><%= livro.ano_publicacao || '—' %></strong></p>
-                <p class="small-text">ISBN: <strong><%= livro.isbn || '—' %></strong></p>
-            </div>
+        <img src="<%= livro.capa_url || 'https://via.placeholder.com/320x460?text=Capa+sem+imagem' %>" alt="Capa do livro <%= livro.titulo %>" style="width:100%; border-radius:1rem; max-height:420px; object-fit:cover;">
+        <div style="margin-top:1rem;">
+            <p class="small-text">Editora: <strong><%= livro.editora || 'Não informada' %></strong></p>
+            <p class="small-text">Ano: <strong><%= livro.ano_publicacao || '—' %></strong></p>
+            <p class="small-text">ISBN: <strong><%= livro.isbn || '—' %></strong></p>
         </div>
-
-        <div class="card">
-            <h3>Sobre a obra</h3>
-            <p class="help-text"><%= livro.descricao || 'Nenhuma descrição disponível.' %></p>
-            <div class="grid-3" style="margin-top: 18px;">
-                <div class="metric-card">
-                    <h3>Disponíveis</h3>
-                    <p><%= livro.disponiveis || 0 %></p>
-                </div>
-                <div class="metric-card">
-                    <h3>Emprestados</h3>
-                    <p><%= livro.emprestados || 0 %></p>
-                </div>
-                <div class="metric-card">
-                    <h3>Reservados</h3>
-                    <p><%= livro.reservados || 0 %></p>
-                </div>
-            </div>
+        <div class="stats-row" style="margin-top:1rem;">
+            <div class="stat-pill"><strong>Disponíveis:</strong> <%= livro.disponiveis || 0 %></div>
+            <div class="stat-pill"><strong>Emprestados:</strong> <%= livro.emprestados || 0 %></div>
+            <div class="stat-pill"><strong>Reservados:</strong> <%= livro.reservados || 0 %></div>
         </div>
     </div>
 
     <div class="card">
-        <h3>Reservar este livro</h3>
-        <div class="alert">
-            Preencha o código NFC/RFID do aluno para criar uma reserva válida por 2 horas.
+        <h3>Sobre a obra</h3>
+        <p class="help-text"><%= livro.descricao || 'Nenhuma descrição disponível.' %></p>
+        <div class="alert" style="margin-top:1.5rem;">
+            Use o código NFC/RFID do aluno para reservar este livro. A reserva vale por 2 horas e pode ser retirada na biblioteca central.
         </div>
-        <form action="/app/reserva/criar" method="post" class="form-grid" style="margin-top: 18px;">
+        <form action="/app/reserva/criar" method="post" style="margin-top: 1.5rem; display:grid; gap:1rem;">
             <input type="hidden" name="livro_id" value="<%= livro.id %>">
             <label>
                 Código NFC/RFID do aluno
@@ -50,12 +43,12 @@
     </div>
 </div>
 
-<div class="card">
-    <h3>Exemplares do livro</h3>
-    <table>
+<div class="card table-card">
+    <h3>Exemplares</h3>
+    <table class="table">
         <thead>
             <tr>
-                <th>RFID do exemplar</th>
+                <th>RFID / Interno</th>
                 <th>Localização</th>
                 <th>Status</th>
             </tr>

@@ -1,9 +1,13 @@
-<%- include('../partials/head', { title, active }) %>
+<%- include('../partials/head', {
+    title: typeof title !== 'undefined' ? title : 'Erro',
+    active: typeof active !== 'undefined' ? active : '',
+    usuarioAtual: typeof usuarioAtual !== 'undefined' ? usuarioAtual : { id: 1, nome: 'Usuário' }
+}) %>
 <div class="panel">
     <div class="card">
         <h2>Ocorreu um erro</h2>
-        <p class="help-text"><%= mensagem %></p>
-        <% if (detalhes) { %>
+        <p class="help-text"><%= typeof mensagem !== 'undefined' ? mensagem : 'Não foi possível concluir a operação.' %></p>
+        <% if (typeof detalhes !== 'undefined' && detalhes) { %>
             <div class="alert"><strong>Detalhes:</strong> <%= detalhes %></div>
         <% } %>
         <a href="/app/biblioteca" class="button">Voltar para a biblioteca</a>

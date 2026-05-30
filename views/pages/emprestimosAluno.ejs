@@ -1,11 +1,17 @@
 <%- include('../partials/head', { title, active }) %>
 <div class="panel">
     <div class="card">
-        <p class="small-text">Histórico de empréstimos para o aluno com ID <strong><%= aluno_id %></strong>.</p>
+        <div class="inline-row" style="align-items:center; justify-content:space-between; width:100%;">
+            <div>
+                <h2>Empréstimos do Aluno</h2>
+                <p class="small-text">Verifique o histórico e o status de cada livro retirado.</p>
+            </div>
+            <span class="badge gray">Aluno ID <%= aluno_id %></span>
+        </div>
     </div>
 
-    <div class="card">
-        <table>
+    <div class="card table-card">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Livro</th>

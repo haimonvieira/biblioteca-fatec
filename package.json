@@ -5,17 +5,22 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon server.js"
+    "start": "node server.js",
+    "dev": "npx nodemon server.js",
+    "fill-covers": "node scripts/fillMissingBookCovers.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "22.x"
+  },
   "type": "commonjs",
   "dependencies": {
     "dotenv": "^17.4.2",
     "ejs": "^6.0.1",
     "express": "^5.2.1",
-    "mysql2": "^3.22.4",
+    "pg": "^8.21.0",
     "qrcode": "^1.5.4"
   }
 }

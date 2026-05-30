@@ -1,12 +1,12 @@
 <%- include('../partials/head', { title, active }) %>
 <div class="panel">
     <div class="card">
-        <div class="inline-row" style="align-items:center; justify-content:space-between; gap:16px;">
+        <div class="inline-row" style="align-items:center; justify-content:space-between; width:100%;">
             <div>
                 <h2>Reserva Confirmada</h2>
-                <p class="small-text">A reserva foi registrada com sucesso e está válida por 2 horas.</p>
+                <p class="small-text">Sua reserva foi registrada com sucesso.</p>
             </div>
-            <span class="badge blue">Sucesso</span>
+            <span class="badge green">Confirmado</span>
         </div>
     </div>
 
@@ -15,7 +15,7 @@
             <h3>Livro reservado</h3>
             <p class="book-title" style="margin-bottom: 4px;"><%= reserva.livro.titulo %></p>
             <p class="book-author"><%= reserva.livro.autor || 'Autor não informado' %></p>
-            <p class="help-text">Retire o exemplar na biblioteca dentro do prazo de validade.</p>
+            <p class="help-text">Retire o exemplar na biblioteca central dentro do prazo de validade.</p>
         </div>
         <div class="card">
             <h3>Dados do aluno</h3>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="card">
-        <p class="help-text">Use o código NFC/RFID do aluno para tirar o exemplar reservado ou registrar o empréstimo em uma estação RFID/NFC.</p>
+        <p class="help-text">Agora use o código NFC/RFID do aluno para retirar o livro na biblioteca ou registrar o empréstimo na estação RFID/NFC.</p>
         <a class="button" href="/app/reservas/<%= reserva.aluno.id %>">Ver minhas reservas</a>
     </div>
 </div>
